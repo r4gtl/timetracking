@@ -1,0 +1,3 @@
+# Production deployment (e.g. Render) on top of the shared base requirements.
+-r base.txt
+gunicorn==26.0.0

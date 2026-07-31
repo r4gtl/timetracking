@@ -1,0 +1,2 @@
+# Local development on top of the shared base requirements.
+-r base.txt
