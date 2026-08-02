@@ -1,0 +1,5 @@
+.loading-spinner {
+  padding: 24px 0;
+  color: var(--text);
+  font-size: 14px;
+}
