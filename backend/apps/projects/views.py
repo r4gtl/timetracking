@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -12,7 +13,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.select_related("client").prefetch_related("tasks")
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
-    filter_backends = [SearchFilter, OrderingFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     search_fields = ["name", "client__name"]
     filterset_fields = ["client", "is_archived", "is_billable"]
     ordering_fields = ["name", "created_at"]
@@ -36,6 +37,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.select_related("project", "project__client")
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
     filterset_fields = ["project", "is_archived"]
 
     @action(detail=True, methods=["post"])
