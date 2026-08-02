@@ -1,0 +1,77 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  border-right: 1px solid var(--border);
+  box-sizing: border-box;
+}
+
+.app-sidebar__brand {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-h);
+  margin-bottom: 32px;
+}
+
+.app-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.app-sidebar__link {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.app-sidebar__link:hover {
+  background: var(--accent-bg);
+}
+
+.app-sidebar__link--active {
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.app-sidebar__logout {
+  margin-top: 24px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.app-sidebar__logout:hover {
+  border-color: var(--accent-border);
+  color: var(--accent);
+}
+
+.app-main {
+  flex-grow: 1;
+  padding: 32px 40px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.app-main h1 {
+  font-size: 28px;
+  letter-spacing: normal;
+  margin: 0 0 24px;
+}
