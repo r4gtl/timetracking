@@ -1,0 +1,72 @@
+.active-timer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.active-timer--running {
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+}
+
+.active-timer__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-grow: 1;
+  min-width: 160px;
+}
+
+.active-timer__project {
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.active-timer__task {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.active-timer__description {
+  font-size: 13px;
+  color: var(--text);
+  font-style: italic;
+}
+
+.active-timer__clock {
+  font-family: var(--mono);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-h);
+  min-width: 110px;
+  text-align: center;
+}
+
+.active-timer--idle {
+  align-items: center;
+}
+
+.active-timer--idle select,
+.active-timer--idle input[type="text"] {
+  font: inherit;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
+}
+
+.active-timer--idle input[type="text"] {
+  flex-grow: 1;
+  min-width: 160px;
+}
+
+.active-timer--idle .entity-form__error {
+  flex-basis: 100%;
+}
