@@ -1,0 +1,68 @@
+.invoice-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.invoice-status-badge--draft {
+  background: var(--border);
+  color: var(--text-h);
+}
+
+.invoice-status-badge--sent {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+.invoice-status-badge--paid {
+  background: rgba(34, 197, 94, 0.15);
+  color: #16a34a;
+}
+
+.invoices-page__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.invoices-page__notice {
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.invoice-lines-table__total td {
+  font-weight: 600;
+  border-top: 2px solid var(--border);
+}
+
+.invoice-detail-page__header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.invoice-detail-page__header p {
+  margin: 0;
+}
+
+.invoice-detail-page__status-field {
+  max-width: 220px;
+  margin-bottom: 20px;
+}
+
+.invoice-detail-page__actions {
+  display: flex;
+  gap: 10px;
+  margin: 16px 0;
+}
