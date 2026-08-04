@@ -1,0 +1,73 @@
+.report-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.report-filters .entity-form__field {
+  min-width: 160px;
+}
+
+.report-filters .entity-form__actions {
+  margin-top: 0;
+}
+
+.reports-page__empty {
+  color: var(--text);
+  padding: 24px 0;
+}
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.summary-cards__card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.summary-cards__label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+
+.summary-cards__value {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+.report-breakdown {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 800px) {
+  .report-breakdown {
+    grid-template-columns: 1fr;
+  }
+}
+
+.entries-detail {
+  margin-bottom: 24px;
+}
+
+.entries-detail summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--text-h);
+  margin-bottom: 12px;
+}

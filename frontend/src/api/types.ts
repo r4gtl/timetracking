@@ -84,6 +84,34 @@ export interface InvoiceLine {
   amount: number;
 }
 
+export interface ReportTotals {
+  total_hours: number;
+  total_amount: number;
+  entries_count: number;
+}
+
+export interface ReportByClient {
+  client_id: number;
+  client_name: string;
+  total_hours: number;
+  total_amount: number;
+}
+
+export interface ReportByProject {
+  project_id: number;
+  project_name: string;
+  client_name: string;
+  total_hours: number;
+  total_amount: number;
+}
+
+export interface ReportSummary {
+  totals: ReportTotals;
+  by_client: ReportByClient[];
+  by_project: ReportByProject[];
+  entries: TimeEntry[];
+}
+
 export interface Invoice {
   id: number;
   client: number;
