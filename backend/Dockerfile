@@ -10,7 +10,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements/ requirements/
-ARG REQUIREMENTS_FILE=requirements/dev.txt
+ARG REQUIREMENTS_FILE=requirements/prod.txt
 RUN pip install --no-cache-dir -r ${REQUIREMENTS_FILE}
 
 COPY . .
