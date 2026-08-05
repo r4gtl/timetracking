@@ -21,4 +21,7 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 EXPOSE 8000
 
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Shell form (not exec-form array) so $PORT gets substituted at runtime.
+# Render injects $PORT automatically; local docker-compose overrides this
+# entire CMD with its own "command:", so it's unaffected by this change.
+CMD gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000}
