@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { extractErrorMessage } from "../api/errors";
 import type { InvoiceStatus } from "../api/types";
+import { BrandLogo } from "../components/common/BrandLogo";
 import "../components/common/common.css";
 import { ErrorMessage } from "../components/common/ErrorMessage";
 import { LoadingSpinner } from "../components/common/LoadingSpinner";
@@ -59,6 +60,7 @@ export function InvoicesPage() {
   return (
     <div className="invoices-page">
       <div className="page-header">
+        <BrandLogo />
         <h1>Fatture</h1>
         <button type="button" className="btn btn--primary" onClick={openCreateModal}>
           Nuova fattura

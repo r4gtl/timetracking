@@ -6,6 +6,12 @@
   margin-bottom: 20px;
 }
 
+.brand-logo {
+  max-height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
 .btn {
   font: inherit;
   padding: 8px 14px;

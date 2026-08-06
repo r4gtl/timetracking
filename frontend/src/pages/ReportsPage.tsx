@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { BrandLogo } from "../components/common/BrandLogo";
 import "../components/common/common.css";
 import { ErrorMessage } from "../components/common/ErrorMessage";
 import { LoadingSpinner } from "../components/common/LoadingSpinner";
@@ -19,6 +20,7 @@ export function ReportsPage() {
   return (
     <div className="reports-page">
       <div className="page-header">
+        <BrandLogo />
         <h1>Report</h1>
       </div>
 

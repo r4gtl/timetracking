@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { extractErrorMessage } from "../api/errors";
 import type { InvoiceStatus } from "../api/types";
+import { BrandLogo } from "../components/common/BrandLogo";
 import "../components/common/common.css";
 import { ErrorMessage } from "../components/common/ErrorMessage";
 import { LoadingSpinner } from "../components/common/LoadingSpinner";
@@ -89,6 +90,7 @@ export function InvoiceDetailPage() {
   return (
     <div className="invoice-detail-page">
       <div className="page-header">
+        <BrandLogo />
         <h1>{invoice ? `Fattura ${invoice.number}` : "Fattura"}</h1>
         <button type="button" className="btn btn--secondary" onClick={() => navigate("/invoices")}>
           Torna alle fatture

@@ -1,6 +1,7 @@
 import io
 from decimal import ROUND_HALF_UP, Decimal
 
+from django.contrib.staticfiles import finders
 from django.db import transaction
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
@@ -9,7 +10,14 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import cm
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+from reportlab.platypus import (
+    Image,
+    Paragraph,
+    SimpleDocTemplate,
+    Spacer,
+    Table,
+    TableStyle,
+)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
@@ -145,6 +153,15 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         )
         styles = getSampleStyleSheet()
         elements = []
+
+        # Logo aziendale in testa alla PDF; se il file non è ancora stato
+        # raccolto da collectstatic, salta senza far fallire la generazione.
+        logo_path = finders.find("invoicing/logo.png")
+        if logo_path:
+            elements.append(
+                Image(logo_path, width=4 * cm, height=1.5 * cm, kind="proportional")
+            )
+            elements.append(Spacer(1, 0.3 * cm))
 
         elements.append(Paragraph(f"Fattura {invoice.number}", styles["Title"]))
         elements.append(Spacer(1, 0.3 * cm))
