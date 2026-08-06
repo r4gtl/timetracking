@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: timetracker-backend
+    runtime: docker
+    repo: https://github.com/r4gtl/timetracking
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    autoDeploy: true
+    envVars:
+      # Fisse: uguali in ogni deploy, non cambiano tra ambienti prod.
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.prod
+      - key: DJANGO_SECURE_SSL_REDIRECT
+        value: "True"
+      # Da impostare manualmente su Render (dashboard > Environment) alla
+      # prima creazione del servizio: segrete o note solo a deploy time.
+      - key: DJANGO_SECRET_KEY
+        sync: false
+      - key: DJANGO_ALLOWED_HOSTS
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false

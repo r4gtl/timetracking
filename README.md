@@ -67,6 +67,27 @@ python manage.py runserver
 
 Requires a reachable Postgres instance (e.g. `docker-compose up db`).
 
+## Deployment
+
+- Il backend gira su Render come Web Service Docker, definito via
+  `render.yaml` (Render Blueprint). Il primo collegamento del repo a Render
+  va fatto una tantum dalla dashboard (New > Blueprint); da lì in poi ogni
+  `git push` su main triggera un deploy automatico.
+- Le variabili con `sync: false` in `render.yaml` (`DJANGO_SECRET_KEY`,
+  `DJANGO_ALLOWED_HOSTS`, `DATABASE_URL`, `CORS_ALLOWED_ORIGINS`) vanno
+  inserite a mano su Render dopo la prima creazione del servizio, perché
+  dipendono dal dominio assegnato da Render stesso e dal provider del
+  database (Neon/Supabase) — non sono nel file per sicurezza e per evitare
+  un problema "uovo e gallina" sul dominio.
+- Il frontend è deployato separatamente su Vercel o Netlify (build Vite
+  standard, nessun file di configurazione dedicato necessario); l'unica
+  variabile da impostare lì è `VITE_API_BASE_URL`, puntata all'URL
+  pubblico del backend Render (es.
+  `https://timetracker-backend.onrender.com/api`).
+- Al termine del primo deploy, l'entrypoint Docker esegue collectstatic +
+  migrate automaticamente (vedi `docker-entrypoint.sh`), quindi non serve
+  eseguire comandi manuali su Render dopo il primo avvio corretto.
+
 ## Environment variables
 
 - `backend/.env.example` — Django settings, database, CORS (copy to `backend/.env`)
