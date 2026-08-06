@@ -91,6 +91,14 @@ export function useTimeEntries(options: UseTimeEntriesOptions = {}) {
     [refetch],
   );
 
+  const deleteEntry = useCallback(
+    async (id: number) => {
+      await apiClient.delete(`/v1/time-entries/${id}/`);
+      await refetch();
+    },
+    [refetch],
+  );
+
   return {
     timeEntries,
     activeEntry,
@@ -101,5 +109,6 @@ export function useTimeEntries(options: UseTimeEntriesOptions = {}) {
     stopTimer,
     createManualEntry,
     updateEntry,
+    deleteEntry,
   };
 }

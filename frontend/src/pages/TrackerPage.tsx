@@ -28,6 +28,7 @@ export function TrackerPage() {
     stopTimer,
     createManualEntry,
     updateEntry,
+    deleteEntry,
   } = useTimeEntries();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -79,6 +80,17 @@ export function TrackerPage() {
     }
   }
 
+  async function handleDelete(entry: TimeEntry) {
+    setActionError(null);
+    try {
+      await deleteEntry(entry.id);
+    } catch (err) {
+      setActionError(
+        extractErrorMessage(err, "Non è stato possibile eliminare la registrazione. Riprova tra qualche istante."),
+      );
+    }
+  }
+
   const hasLoadedOnce = !(loading && timeEntries.length === 0 && !activeEntry);
   const hasSelectableProject = projects.some((project) => !project.is_archived);
 
@@ -116,7 +128,12 @@ export function TrackerPage() {
       )}
 
       {!error && hasLoadedOnce && (
-        <TimeEntryList entries={timeEntries} projects={projects} onEdit={openEditModal} />
+        <TimeEntryList
+          entries={timeEntries}
+          projects={projects}
+          onEdit={openEditModal}
+          onDelete={handleDelete}
+        />
       )}
 
       <Modal
