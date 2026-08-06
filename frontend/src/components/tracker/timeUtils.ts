@@ -2,10 +2,15 @@ function pad(value: number): string {
   return String(value).padStart(2, "0");
 }
 
+/** Secondi trascorsi da startTime (ISO) a ora. */
+export function elapsedSeconds(startTimeIso: string): number {
+  const elapsedMs = Date.now() - new Date(startTimeIso).getTime();
+  return Math.max(0, Math.floor(elapsedMs / 1000));
+}
+
 /** Tempo trascorso da startTime (ISO) a ora, formattato HH:MM:SS. */
 export function formatElapsed(startTimeIso: string): string {
-  const elapsedMs = Date.now() - new Date(startTimeIso).getTime();
-  const totalSeconds = Math.max(0, Math.floor(elapsedMs / 1000));
+  const totalSeconds = elapsedSeconds(startTimeIso);
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;

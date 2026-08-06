@@ -7,6 +7,8 @@ import { LoadingSpinner } from "../components/common/LoadingSpinner";
 import { Modal } from "../components/common/Modal";
 import { ProjectForm } from "../components/projects/ProjectForm";
 import { ProjectListItem } from "../components/projects/ProjectListItem";
+import { Card } from "../components/ui/Card";
+import { EmptyState } from "../components/ui/EmptyState";
 import { useClients } from "../hooks/useClients";
 import { useProjects } from "../hooks/useProjects";
 import type { ProjectInput } from "../hooks/useProjects";
@@ -62,7 +64,9 @@ export function ProjectsPage() {
       }
       closeModal();
     } catch (err) {
-      setFormError(extractErrorMessage(err, "Impossibile salvare il progetto."));
+      setFormError(
+        extractErrorMessage(err, "Non è stato possibile salvare il progetto. Riprova tra qualche istante."),
+      );
     }
   }
 
@@ -71,7 +75,9 @@ export function ProjectsPage() {
     try {
       await archiveProject(project.id);
     } catch (err) {
-      setActionError(extractErrorMessage(err, "Impossibile archiviare il progetto."));
+      setActionError(
+        extractErrorMessage(err, "Non è stato possibile archiviare il progetto. Riprova tra qualche istante."),
+      );
     }
   }
 
@@ -80,7 +86,9 @@ export function ProjectsPage() {
     try {
       await unarchiveProject(project.id);
     } catch (err) {
-      setActionError(extractErrorMessage(err, "Impossibile riattivare il progetto."));
+      setActionError(
+        extractErrorMessage(err, "Non è stato possibile riattivare il progetto. Riprova tra qualche istante."),
+      );
     }
   }
 
@@ -121,7 +129,18 @@ export function ProjectsPage() {
       {loading && projects.length === 0 && <LoadingSpinner />}
       {error && <ErrorMessage message={error} />}
 
-      {!error && !(loading && projects.length === 0) && (
+      {!error && !(loading && projects.length === 0) && projects.length === 0 && (
+        <Card>
+          <EmptyState
+            title={clientFilter === "" ? "Nessun progetto ancora" : "Nessun progetto per questo cliente"}
+            description="Crea un progetto per iniziare a registrare le ore."
+            actionLabel="Aggiungi progetto"
+            onAction={openCreateModal}
+          />
+        </Card>
+      )}
+
+      {!error && !(loading && projects.length === 0) && projects.length > 0 && (
         <ul className="project-list">
           {projects.map((project) => (
             <ProjectListItem
@@ -133,7 +152,6 @@ export function ProjectsPage() {
               onTasksChanged={refetch}
             />
           ))}
-          {projects.length === 0 && <li className="empty-row">Nessun progetto trovato.</li>}
         </ul>
       )}
 

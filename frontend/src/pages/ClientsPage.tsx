@@ -7,6 +7,8 @@ import { ErrorMessage } from "../components/common/ErrorMessage";
 import { LoadingSpinner } from "../components/common/LoadingSpinner";
 import { Modal } from "../components/common/Modal";
 import { ClientForm } from "../components/clients/ClientForm";
+import { Card } from "../components/ui/Card";
+import { EmptyState } from "../components/ui/EmptyState";
 import { useClients } from "../hooks/useClients";
 import type { ClientInput } from "../hooks/useClients";
 
@@ -55,7 +57,9 @@ export function ClientsPage() {
       }
       closeModal();
     } catch (err) {
-      setFormError(extractErrorMessage(err, "Impossibile salvare il cliente."));
+      setFormError(
+        extractErrorMessage(err, "Non è stato possibile salvare il cliente. Riprova tra qualche istante."),
+      );
     }
   }
 
@@ -65,7 +69,9 @@ export function ClientsPage() {
     try {
       await archiveClient(archivingClient.id);
     } catch (err) {
-      setActionError(extractErrorMessage(err, "Impossibile archiviare il cliente."));
+      setActionError(
+        extractErrorMessage(err, "Non è stato possibile archiviare il cliente. Riprova tra qualche istante."),
+      );
     } finally {
       setArchivingClient(null);
     }
@@ -76,7 +82,9 @@ export function ClientsPage() {
     try {
       await unarchiveClient(client.id);
     } catch (err) {
-      setActionError(extractErrorMessage(err, "Impossibile riattivare il cliente."));
+      setActionError(
+        extractErrorMessage(err, "Non è stato possibile riattivare il cliente. Riprova tra qualche istante."),
+      );
     }
   }
 
@@ -102,7 +110,18 @@ export function ClientsPage() {
       {loading && clients.length === 0 && <LoadingSpinner />}
       {error && <ErrorMessage message={error} />}
 
-      {!error && !(loading && clients.length === 0) && (
+      {!error && !(loading && clients.length === 0) && clients.length === 0 && (
+        <Card>
+          <EmptyState
+            title="Nessun cliente ancora"
+            description="Aggiungi il primo cliente per iniziare a tracciare il tempo sui suoi progetti."
+            actionLabel="Aggiungi cliente"
+            onAction={openCreateModal}
+          />
+        </Card>
+      )}
+
+      {!error && !(loading && clients.length === 0) && clients.length > 0 && (
         <table className="data-table">
           <thead>
             <tr>
@@ -148,13 +167,6 @@ export function ClientsPage() {
                 </td>
               </tr>
             ))}
-            {clients.length === 0 && (
-              <tr>
-                <td colSpan={5} className="empty-row">
-                  Nessun cliente trovato.
-                </td>
-              </tr>
-            )}
           </tbody>
         </table>
       )}

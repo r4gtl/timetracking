@@ -29,9 +29,9 @@ export function TimeEntryList({ entries, projects, onEdit }: TimeEntryListProps)
           <th>Progetto</th>
           <th>Task</th>
           <th>Descrizione</th>
-          <th>Durata</th>
-          <th>Tariffa</th>
-          <th>Importo</th>
+          <th className="num">Durata</th>
+          <th className="num">Tariffa</th>
+          <th className="num">Importo</th>
           <th>Fatturabile</th>
           <th>Fatturata</th>
           <th>Azioni</th>
@@ -47,9 +47,9 @@ export function TimeEntryList({ entries, projects, onEdit }: TimeEntryListProps)
               <td>{project?.name ?? `#${entry.project}`}</td>
               <td>{task?.name ?? "—"}</td>
               <td>{entry.description || "—"}</td>
-              <td>{formatDurationShort(entry.duration_seconds)}</td>
-              <td>{entry.resolved_hourly_rate ?? "—"}</td>
-              <td>{entry.estimated_amount ?? "—"}</td>
+              <td className="num">{formatDurationShort(entry.duration_seconds)}</td>
+              <td className="num">{entry.resolved_hourly_rate ?? "—"}</td>
+              <td className="num">{entry.estimated_amount ?? "—"}</td>
               <td>{entry.is_billable ? "Sì" : "No"}</td>
               <td>{entry.is_invoiced ? "Sì" : "No"}</td>
               <td className="actions-cell">

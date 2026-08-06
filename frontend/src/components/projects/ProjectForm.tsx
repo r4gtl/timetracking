@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import { useClients } from "../../hooks/useClients";
 import type { Project } from "../../api/types";
 import type { ProjectInput } from "../../hooks/useProjects";
+import { FieldError } from "../ui/FieldError";
 
 interface ProjectFormProps {
   initialValues?: Project;
@@ -34,10 +35,22 @@ export function ProjectForm({ initialValues, onSubmit, onCancel, error }: Projec
         }
       : EMPTY_VALUES,
   );
+  const [validationError, setValidationError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setValidationError(null);
+
+    if (!values.client) {
+      setValidationError("Seleziona un cliente.");
+      return;
+    }
+    if (!values.name.trim()) {
+      setValidationError("Il nome del progetto è obbligatorio.");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       await onSubmit({
@@ -51,14 +64,19 @@ export function ProjectForm({ initialValues, onSubmit, onCancel, error }: Projec
     }
   }
 
+  const displayedError = validationError ?? error;
+
   return (
-    <form className="entity-form" onSubmit={handleSubmit}>
-      {error && <p className="entity-form__error">{error}</p>}
+    <form className="entity-form" onSubmit={handleSubmit} noValidate>
+      {displayedError && <FieldError message={displayedError} />}
       <label className="entity-form__field">
         Cliente
         <select
           value={values.client || ""}
-          onChange={(event) => setValues({ ...values, client: Number(event.target.value) })}
+          onChange={(event) => {
+            setValidationError(null);
+            setValues({ ...values, client: Number(event.target.value) });
+          }}
           required
         >
           <option value="" disabled>
@@ -76,7 +94,10 @@ export function ProjectForm({ initialValues, onSubmit, onCancel, error }: Projec
         <input
           type="text"
           value={values.name}
-          onChange={(event) => setValues({ ...values, name: event.target.value })}
+          onChange={(event) => {
+            setValidationError(null);
+            setValues({ ...values, name: event.target.value });
+          }}
           required
         />
       </label>

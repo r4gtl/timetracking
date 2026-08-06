@@ -40,7 +40,9 @@ export function useInvoices(options: UseInvoicesOptions = {}) {
       });
       setInvoices(data);
     } catch (err) {
-      setError(extractErrorMessage(err, "Impossibile caricare le fatture."));
+      setError(
+        extractErrorMessage(err, "Non è stato possibile caricare le fatture. Riprova tra qualche istante."),
+      );
     } finally {
       setLoading(false);
     }

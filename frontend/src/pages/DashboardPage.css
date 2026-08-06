@@ -1,19 +1,19 @@
 .dashboard-section {
-  margin-bottom: 24px;
+  margin-bottom: var(--space-3);
 }
 
 .dashboard-section__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--space-2);
   margin-bottom: 12px;
 }
 
 .dashboard-section__title {
   font-size: 16px;
   font-weight: 600;
-  color: var(--text-h);
+  color: var(--ink);
   margin: 0 0 12px;
 }
 
@@ -21,15 +21,20 @@
   margin: 0;
 }
 
+.dashboard-section__header a {
+  color: var(--accent-ledger);
+  font-size: 14px;
+}
+
 .dashboard-section__summary {
-  color: var(--text);
+  color: var(--ink-muted);
   margin: 0 0 10px;
 }
 
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: var(--space-3);
 }
 
 @media (max-width: 800px) {
@@ -44,14 +49,24 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-1);
 }
 
 .dashboard-invoice-list li {
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
+  padding: var(--space-1) 0;
+  border-bottom: 1px solid var(--border-hairline);
 }
 
 .dashboard-invoice-list li:last-child {
   border-bottom: none;
+  padding-bottom: 0;
+}
+
+.dashboard-invoice-list a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.dashboard-invoice-list a:hover {
+  color: var(--accent-ledger);
 }

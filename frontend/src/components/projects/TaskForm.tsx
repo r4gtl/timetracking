@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import type { Task } from "../../api/types";
 import type { TaskInput } from "../../hooks/useTasks";
+import { FieldError } from "../ui/FieldError";
 
 interface TaskFormProps {
   initialValues?: Task;
@@ -26,10 +27,18 @@ export function TaskForm({ initialValues, onSubmit, onCancel, error }: TaskFormP
         }
       : EMPTY_VALUES,
   );
+  const [validationError, setValidationError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setValidationError(null);
+
+    if (!values.name.trim()) {
+      setValidationError("Il nome del task è obbligatorio.");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       await onSubmit({
@@ -41,6 +50,8 @@ export function TaskForm({ initialValues, onSubmit, onCancel, error }: TaskFormP
     }
   }
 
+  const displayedError = validationError ?? error;
+
   function handleBillableChange(value: string) {
     if (value === "inherit") {
       setValues({ ...values, is_billable: null });
@@ -50,14 +61,17 @@ export function TaskForm({ initialValues, onSubmit, onCancel, error }: TaskFormP
   }
 
   return (
-    <form className="entity-form" onSubmit={handleSubmit}>
-      {error && <p className="entity-form__error">{error}</p>}
+    <form className="entity-form" onSubmit={handleSubmit} noValidate>
+      {displayedError && <FieldError message={displayedError} />}
       <label className="entity-form__field">
         Nome
         <input
           type="text"
           value={values.name}
-          onChange={(event) => setValues({ ...values, name: event.target.value })}
+          onChange={(event) => {
+            setValidationError(null);
+            setValues({ ...values, name: event.target.value });
+          }}
           required
         />
       </label>

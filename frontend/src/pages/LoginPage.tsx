@@ -1,7 +1,9 @@
+import axios from "axios";
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
+import { FieldError } from "../components/ui/FieldError";
 import "./LoginPage.css";
 
 export function LoginPage() {
@@ -19,8 +21,12 @@ export function LoginPage() {
     try {
       await login(username, password);
       navigate("/", { replace: true });
-    } catch {
-      setError("Username o password non corretti.");
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
+        setError("Username o password non corretti.");
+      } else {
+        setError("Non è stato possibile completare l'accesso. Riprova tra qualche istante.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -30,7 +36,7 @@ export function LoginPage() {
     <div className="login-page">
       <form className="login-form" onSubmit={handleSubmit}>
         <h1>Accedi</h1>
-        {error && <p className="login-form__error">{error}</p>}
+        {error && <FieldError message={error} />}
         <label className="login-form__field">
           Username
           <input

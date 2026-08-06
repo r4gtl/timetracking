@@ -31,7 +31,9 @@ export function useClients(options: UseClientsOptions = {}) {
       });
       setClients(data);
     } catch (err) {
-      setError(extractErrorMessage(err, "Impossibile caricare i clienti."));
+      setError(
+        extractErrorMessage(err, "Non è stato possibile caricare i clienti. Riprova tra qualche istante."),
+      );
     } finally {
       setLoading(false);
     }

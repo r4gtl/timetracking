@@ -1,0 +1,36 @@
+.timer-ring {
+  display: block;
+  flex-shrink: 0;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.timer-ring__track {
+  stroke: var(--border-color);
+}
+
+.timer-ring__arc {
+  stroke: var(--accent-timer);
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition: stroke-dashoffset 0.3s linear;
+}
+
+.timer-ring__arc--active {
+  animation: timer-ring-spin 2s linear infinite;
+}
+
+@keyframes timer-ring-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timer-ring__arc--active {
+    animation: none;
+  }
+}

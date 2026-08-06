@@ -13,18 +13,18 @@ export function InvoiceLinesTable({ lines }: InvoiceLinesTableProps) {
       <thead>
         <tr>
           <th>Descrizione</th>
-          <th>Ore</th>
-          <th>Tariffa unitaria</th>
-          <th>Importo</th>
+          <th className="num">Ore</th>
+          <th className="num">Tariffa unitaria</th>
+          <th className="num">Importo</th>
         </tr>
       </thead>
       <tbody>
         {lines.map((line) => (
           <tr key={line.id}>
             <td>{line.description}</td>
-            <td>{Number(line.quantity_hours).toFixed(2)}</td>
-            <td>€ {Number(line.unit_rate).toFixed(2)}</td>
-            <td>€ {line.amount.toFixed(2)}</td>
+            <td className="num">{Number(line.quantity_hours).toFixed(2)}</td>
+            <td className="num">€ {Number(line.unit_rate).toFixed(2)}</td>
+            <td className="num">€ {line.amount.toFixed(2)}</td>
           </tr>
         ))}
         {lines.length === 0 && (
@@ -36,7 +36,7 @@ export function InvoiceLinesTable({ lines }: InvoiceLinesTableProps) {
         )}
         <tr className="invoice-lines-table__total">
           <td colSpan={3}>Totale</td>
-          <td>€ {total.toFixed(2)}</td>
+          <td className="num">€ {total.toFixed(2)}</td>
         </tr>
       </tbody>
     </table>

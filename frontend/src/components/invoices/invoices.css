@@ -10,59 +10,60 @@
 }
 
 .invoice-status-badge--draft {
-  background: var(--border);
-  color: var(--text-h);
+  background: var(--border-hairline);
+  color: var(--ink-muted);
 }
 
 .invoice-status-badge--sent {
-  background: rgba(59, 130, 246, 0.15);
-  color: #3b82f6;
+  background: var(--accent-ledger-bg);
+  color: var(--accent-ledger);
 }
 
 .invoice-status-badge--paid {
-  background: rgba(34, 197, 94, 0.15);
-  color: #16a34a;
+  background: var(--success-bg);
+  color: var(--success);
 }
 
 .invoices-page__filters {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-3);
 }
 
 .invoices-page__notice {
   padding: 10px 12px;
-  border-radius: 6px;
-  background: var(--accent-bg);
-  color: var(--accent);
+  border-radius: var(--radius-control);
+  background: var(--accent-ledger-bg);
+  color: var(--accent-ledger);
   font-size: 14px;
-  margin-bottom: 16px;
+  margin-bottom: var(--space-2);
 }
 
 .invoice-lines-table__total td {
   font-weight: 600;
-  border-top: 2px solid var(--border);
+  border-top: 2px solid var(--border-color);
 }
 
 .invoice-detail-page__header {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-3);
 }
 
 .invoice-detail-page__header p {
   margin: 0;
+  color: var(--ink-muted);
 }
 
 .invoice-detail-page__status-field {
   max-width: 220px;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-3);
 }
 
 .invoice-detail-page__actions {
   display: flex;
-  gap: 10px;
-  margin: 16px 0;
+  gap: var(--space-1);
+  margin: var(--space-2) 0;
 }

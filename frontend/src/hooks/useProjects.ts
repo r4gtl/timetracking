@@ -36,7 +36,9 @@ export function useProjects(options: UseProjectsOptions = {}) {
       });
       setProjects(data);
     } catch (err) {
-      setError(extractErrorMessage(err, "Impossibile caricare i progetti."));
+      setError(
+        extractErrorMessage(err, "Non è stato possibile caricare i progetti. Riprova tra qualche istante."),
+      );
     } finally {
       setLoading(false);
     }

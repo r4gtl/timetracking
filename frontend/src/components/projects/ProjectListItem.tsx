@@ -5,6 +5,7 @@ import { useTasks } from "../../hooks/useTasks";
 import type { TaskInput } from "../../hooks/useTasks";
 import { ConfirmDialog } from "../common/ConfirmDialog";
 import { Modal } from "../common/Modal";
+import { FieldError } from "../ui/FieldError";
 import { TaskForm } from "./TaskForm";
 
 interface ProjectListItemProps {
@@ -60,7 +61,9 @@ export function ProjectListItem({
       closeTaskModal();
       onTasksChanged();
     } catch (err) {
-      setTaskFormError(extractErrorMessage(err, "Impossibile salvare il task."));
+      setTaskFormError(
+        extractErrorMessage(err, "Non è stato possibile salvare il task. Riprova tra qualche istante."),
+      );
     }
   }
 
@@ -70,7 +73,9 @@ export function ProjectListItem({
       await archiveTask(archivingTask.id);
       onTasksChanged();
     } catch (err) {
-      setTaskActionError(extractErrorMessage(err, "Impossibile archiviare il task."));
+      setTaskActionError(
+        extractErrorMessage(err, "Non è stato possibile archiviare il task. Riprova tra qualche istante."),
+      );
     } finally {
       setArchivingTask(null);
     }
@@ -82,7 +87,9 @@ export function ProjectListItem({
       await unarchiveTask(task.id);
       onTasksChanged();
     } catch (err) {
-      setTaskActionError(extractErrorMessage(err, "Impossibile riattivare il task."));
+      setTaskActionError(
+        extractErrorMessage(err, "Non è stato possibile riattivare il task. Riprova tra qualche istante."),
+      );
     }
   }
 
@@ -104,10 +111,10 @@ export function ProjectListItem({
           <span className="project-item__name">{project.name}</span>
           <span className="project-item__client">{project.client_name}</span>
         </button>
-        <span className="project-item__meta">
+        <span className="project-item__meta num">
           {project.default_hourly_rate ? `${project.default_hourly_rate} / h` : "—"}
         </span>
-        <span className="project-item__meta">
+        <span className="project-item__meta num">
           {project.budget_hours ? `${project.budget_hours} h budget` : "—"}
         </span>
         <span className="project-item__badge">
@@ -145,7 +152,7 @@ export function ProjectListItem({
             </button>
           </div>
 
-          {taskActionError && <p className="entity-form__error">{taskActionError}</p>}
+          {taskActionError && <FieldError message={taskActionError} />}
 
           {project.tasks.length === 0 ? (
             <p className="empty-row">Nessun task per questo progetto.</p>
@@ -154,7 +161,7 @@ export function ProjectListItem({
               <thead>
                 <tr>
                   <th>Nome</th>
-                  <th>Tariffa effettiva</th>
+                  <th className="num">Tariffa effettiva</th>
                   <th>Fatturabile (effettivo)</th>
                   <th>Stato</th>
                   <th>Azioni</th>
@@ -164,7 +171,7 @@ export function ProjectListItem({
                 {project.tasks.map((task) => (
                   <tr key={task.id}>
                     <td>{task.name}</td>
-                    <td>
+                    <td className="num">
                       {task.effective_hourly_rate ?? "—"}
                       {task.hourly_rate ? " (specifica)" : " (ereditata)"}
                     </td>

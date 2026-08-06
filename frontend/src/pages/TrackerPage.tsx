@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { extractErrorMessage } from "../api/errors";
 import type { TimeEntry } from "../api/types";
 import "../components/common/common.css";
@@ -8,12 +9,15 @@ import { Modal } from "../components/common/Modal";
 import { ActiveTimer } from "../components/tracker/ActiveTimer";
 import { TimeEntryForm } from "../components/tracker/TimeEntryForm";
 import { TimeEntryList } from "../components/tracker/TimeEntryList";
+import { Card } from "../components/ui/Card";
+import { EmptyState } from "../components/ui/EmptyState";
 import { useProjects } from "../hooks/useProjects";
 import { useTimeEntries } from "../hooks/useTimeEntries";
 import type { TimeEntryInput } from "../hooks/useTimeEntries";
 import "./TrackerPage.css";
 
 export function TrackerPage() {
+  const navigate = useNavigate();
   const { projects } = useProjects();
   const {
     timeEntries,
@@ -58,7 +62,9 @@ export function TrackerPage() {
       }
       closeModal();
     } catch (err) {
-      setFormError(extractErrorMessage(err, "Impossibile salvare la time entry."));
+      setFormError(
+        extractErrorMessage(err, "Non è stato possibile salvare la time entry. Riprova tra qualche istante."),
+      );
     }
   }
 
@@ -67,11 +73,14 @@ export function TrackerPage() {
     try {
       await stopTimer(entryId);
     } catch (err) {
-      setActionError(extractErrorMessage(err, "Impossibile fermare il timer."));
+      setActionError(
+        extractErrorMessage(err, "Non è stato possibile fermare il timer. Riprova tra qualche istante."),
+      );
     }
   }
 
   const hasLoadedOnce = !(loading && timeEntries.length === 0 && !activeEntry);
+  const hasSelectableProject = projects.some((project) => !project.is_archived);
 
   return (
     <div className="tracker-page">
@@ -86,7 +95,18 @@ export function TrackerPage() {
       {loading && timeEntries.length === 0 && <LoadingSpinner />}
       {error && <ErrorMessage message={error} />}
 
-      {hasLoadedOnce && (
+      {hasLoadedOnce && !activeEntry && !hasSelectableProject && (
+        <Card>
+          <EmptyState
+            title="Configura almeno un progetto"
+            description="Per avviare un timer serve un cliente con almeno un progetto e un task associato."
+            actionLabel="Vai a Clienti"
+            onAction={() => navigate("/clients")}
+          />
+        </Card>
+      )}
+
+      {hasLoadedOnce && (activeEntry || hasSelectableProject) && (
         <ActiveTimer
           activeEntry={activeEntry}
           projects={projects}

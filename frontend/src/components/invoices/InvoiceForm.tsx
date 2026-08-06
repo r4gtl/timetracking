@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { useClients } from "../../hooks/useClients";
 import type { GenerateInvoiceInput } from "../../hooks/useInvoices";
+import { FieldError } from "../ui/FieldError";
 
 interface InvoiceFormProps {
   onSubmit: (values: GenerateInvoiceInput) => Promise<void>;
@@ -68,7 +69,7 @@ export function InvoiceForm({ onSubmit, onCancel, error }: InvoiceFormProps) {
 
   return (
     <form className="entity-form" onSubmit={handleSubmit}>
-      {displayedError && <p className="entity-form__error">{displayedError}</p>}
+      {displayedError && <FieldError message={displayedError} />}
       <label className="entity-form__field">
         Cliente
         <select

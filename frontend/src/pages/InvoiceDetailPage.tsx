@@ -11,6 +11,7 @@ import { AddManualLineForm } from "../components/invoices/AddManualLineForm";
 import { InvoiceLinesTable } from "../components/invoices/InvoiceLinesTable";
 import { InvoiceStatusBadge } from "../components/invoices/InvoiceStatusBadge";
 import "../components/invoices/invoices.css";
+import { Card } from "../components/ui/Card";
 import type { AddManualLineInput } from "../hooks/useInvoiceDetail";
 import { useInvoiceDetail } from "../hooks/useInvoiceDetail";
 
@@ -51,7 +52,9 @@ export function InvoiceDetailPage() {
       await addManualLine(values);
       closeLineModal();
     } catch (err) {
-      setLineError(extractErrorMessage(err, "Impossibile aggiungere la riga."));
+      setLineError(
+        extractErrorMessage(err, "Non è stato possibile aggiungere la riga. Riprova tra qualche istante."),
+      );
     }
   }
 
@@ -60,7 +63,9 @@ export function InvoiceDetailPage() {
     try {
       await updateStatus(status);
     } catch (err) {
-      setActionError(extractErrorMessage(err, "Impossibile aggiornare lo stato."));
+      setActionError(
+        extractErrorMessage(err, "Non è stato possibile aggiornare lo stato. Riprova tra qualche istante."),
+      );
     }
   }
 
@@ -69,7 +74,9 @@ export function InvoiceDetailPage() {
     try {
       await downloadPdf();
     } catch (err) {
-      setActionError(extractErrorMessage(err, "Impossibile scaricare il PDF."));
+      setActionError(
+        extractErrorMessage(err, "Non è stato possibile scaricare il PDF. Riprova tra qualche istante."),
+      );
     }
   }
 
@@ -139,7 +146,9 @@ export function InvoiceDetailPage() {
             </select>
           </label>
 
-          <InvoiceLinesTable lines={invoice.lines} />
+          <Card className="ui-card--flush">
+            <InvoiceLinesTable lines={invoice.lines} />
+          </Card>
 
           <div className="invoice-detail-page__actions">
             <button type="button" className="btn btn--secondary" onClick={openLineModal}>

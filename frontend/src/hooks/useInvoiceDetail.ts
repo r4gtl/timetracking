@@ -27,7 +27,9 @@ export function useInvoiceDetail(id: number) {
       if (axios.isAxiosError(err) && err.response?.status === 404) {
         setNotFound(true);
       } else {
-        setError(extractErrorMessage(err, "Impossibile caricare la fattura."));
+        setError(
+          extractErrorMessage(err, "Non è stato possibile caricare la fattura. Riprova tra qualche istante."),
+        );
       }
     } finally {
       setLoading(false);

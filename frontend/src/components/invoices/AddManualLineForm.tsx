@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import type { AddManualLineInput } from "../../hooks/useInvoiceDetail";
+import { FieldError } from "../ui/FieldError";
 
 interface AddManualLineFormProps {
   onSubmit: (values: AddManualLineInput) => Promise<void>;
@@ -53,7 +54,7 @@ export function AddManualLineForm({ onSubmit, onCancel, error }: AddManualLineFo
 
   return (
     <form className="entity-form" onSubmit={handleSubmit}>
-      {displayedError && <p className="entity-form__error">{displayedError}</p>}
+      {displayedError && <FieldError message={displayedError} />}
       <label className="entity-form__field">
         Descrizione
         <input

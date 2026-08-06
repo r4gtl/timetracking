@@ -9,6 +9,8 @@ import { Modal } from "../components/common/Modal";
 import { InvoiceForm } from "../components/invoices/InvoiceForm";
 import { InvoiceList } from "../components/invoices/InvoiceList";
 import "../components/invoices/invoices.css";
+import { Card } from "../components/ui/Card";
+import { EmptyState } from "../components/ui/EmptyState";
 import { useClients } from "../hooks/useClients";
 import { useInvoices } from "../hooks/useInvoices";
 import type { GenerateInvoiceInput } from "../hooks/useInvoices";
@@ -53,7 +55,9 @@ export function InvoicesPage() {
           : "Fattura creata.",
       );
     } catch (err) {
-      setFormError(extractErrorMessage(err, "Impossibile generare la fattura."));
+      setFormError(
+        extractErrorMessage(err, "Non è stato possibile generare la fattura. Riprova tra qualche istante."),
+      );
     }
   }
 
@@ -103,7 +107,22 @@ export function InvoicesPage() {
       {loading && invoices.length === 0 && <LoadingSpinner />}
       {error && <ErrorMessage message={error} />}
 
-      {!error && !(loading && invoices.length === 0) && <InvoiceList invoices={invoices} />}
+      {!error && !(loading && invoices.length === 0) && invoices.length === 0 && (
+        <Card>
+          <EmptyState
+            title="Nessuna fattura ancora"
+            description="Le fatture create appariranno qui."
+            actionLabel="Crea fattura"
+            onAction={openCreateModal}
+          />
+        </Card>
+      )}
+
+      {!error && !(loading && invoices.length === 0) && invoices.length > 0 && (
+        <Card className="ui-card--flush">
+          <InvoiceList invoices={invoices} />
+        </Card>
+      )}
 
       <Modal isOpen={isModalOpen} onClose={closeModal} title="Nuova fattura">
         <InvoiceForm onSubmit={handleGenerate} onCancel={closeModal} error={formError} />

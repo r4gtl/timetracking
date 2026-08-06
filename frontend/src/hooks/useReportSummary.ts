@@ -42,7 +42,9 @@ export function useReportSummary() {
       });
       setData(data);
     } catch (err) {
-      setError(extractErrorMessage(err, "Impossibile caricare il report."));
+      setError(
+        extractErrorMessage(err, "Non è stato possibile caricare il report. Riprova tra qualche istante."),
+      );
     } finally {
       setLoading(false);
     }

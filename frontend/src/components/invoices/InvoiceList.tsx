@@ -22,7 +22,7 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
           <th>Cliente</th>
           <th>Data emissione</th>
           <th>Stato</th>
-          <th>Totale</th>
+          <th className="num">Totale</th>
           <th>Azioni</th>
         </tr>
       </thead>
@@ -35,7 +35,7 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
             <td>
               <InvoiceStatusBadge status={invoice.status} />
             </td>
-            <td>€ {invoice.total_amount.toFixed(2)}</td>
+            <td className="num">€ {invoice.total_amount.toFixed(2)}</td>
             <td className="actions-cell">
               <button
                 type="button"
@@ -47,13 +47,6 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
             </td>
           </tr>
         ))}
-        {invoices.length === 0 && (
-          <tr>
-            <td colSpan={6} className="empty-row">
-              Nessuna fattura trovata.
-            </td>
-          </tr>
-        )}
       </tbody>
     </table>
   );

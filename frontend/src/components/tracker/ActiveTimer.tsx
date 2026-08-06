@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { extractErrorMessage } from "../../api/errors";
 import type { Project, TimeEntry } from "../../api/types";
-import { formatElapsed } from "./timeUtils";
+import { FieldError } from "../ui/FieldError";
+import { TimerRing } from "../ui/TimerRing";
+import { elapsedSeconds, formatElapsed } from "./timeUtils";
 import "./ActiveTimer.css";
 
 interface ActiveTimerProps {
@@ -26,18 +28,22 @@ interface RunningTimerProps {
 
 function RunningTimer({ entry, projects, onStop }: RunningTimerProps) {
   const [elapsed, setElapsed] = useState(() => formatElapsed(entry.start_time));
+  const [seconds, setSeconds] = useState(() => elapsedSeconds(entry.start_time));
   const [isStopping, setIsStopping] = useState(false);
 
   useEffect(() => {
     setElapsed(formatElapsed(entry.start_time));
+    setSeconds(elapsedSeconds(entry.start_time));
     const interval = setInterval(() => {
       setElapsed(formatElapsed(entry.start_time));
+      setSeconds(elapsedSeconds(entry.start_time));
     }, 1000);
     return () => clearInterval(interval);
   }, [entry.start_time]);
 
   const project = projects.find((item) => item.id === entry.project);
   const task = project?.tasks.find((item) => item.id === entry.task);
+  const ringProgress = (seconds % 60) / 60;
 
   async function handleStop() {
     setIsStopping(true);
@@ -59,7 +65,10 @@ function RunningTimer({ entry, projects, onStop }: RunningTimerProps) {
           <span className="active-timer__description">{entry.description}</span>
         )}
       </div>
-      <div className="active-timer__clock">{elapsed}</div>
+      <div className="active-timer__clock-group">
+        <TimerRing progress={ringProgress} active size={40} />
+        <div className="active-timer__clock num">{elapsed}</div>
+      </div>
       <button
         type="button"
         className="btn btn--danger"
@@ -102,7 +111,7 @@ function StartTimerForm({ projects, onStart }: StartTimerFormProps) {
       setDescription("");
       setTaskId("");
     } catch (err) {
-      setError(extractErrorMessage(err, "Impossibile avviare il timer."));
+      setError(extractErrorMessage(err, "Non è stato possibile avviare il timer. Riprova tra qualche istante."));
     } finally {
       setIsStarting(false);
     }
@@ -110,7 +119,7 @@ function StartTimerForm({ projects, onStart }: StartTimerFormProps) {
 
   return (
     <div className="active-timer active-timer--idle">
-      {error && <p className="entity-form__error">{error}</p>}
+      {error && <FieldError message={error} />}
       <select value={projectId} onChange={(event) => handleProjectChange(event.target.value)}>
         <option value="">Seleziona un progetto</option>
         {activeProjects.map((project) => (
@@ -139,14 +148,17 @@ function StartTimerForm({ projects, onStart }: StartTimerFormProps) {
         value={description}
         onChange={(event) => setDescription(event.target.value)}
       />
-      <button
-        type="button"
-        className="btn btn--primary"
-        onClick={handleStart}
-        disabled={projectId === "" || isStarting}
-      >
-        {isStarting ? "Avvio…" : "Avvia"}
-      </button>
+      <div className="active-timer__start-action">
+        <TimerRing progress={0} active={false} size={32} />
+        <button
+          type="button"
+          className="btn btn--accent"
+          onClick={handleStart}
+          disabled={projectId === "" || isStarting}
+        >
+          {isStarting ? "Avvio…" : "Avvia"}
+        </button>
+      </div>
     </div>
   );
 }

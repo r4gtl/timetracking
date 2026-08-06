@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import type { Project, TimeEntry } from "../../api/types";
 import type { TimeEntryInput } from "../../hooks/useTimeEntries";
+import { FieldError } from "../ui/FieldError";
 import { fromDatetimeLocalValue, toDatetimeLocalValue } from "./timeUtils";
 
 interface TimeEntryFormProps {
@@ -105,7 +106,7 @@ export function TimeEntryForm({
 
   return (
     <form className="entity-form" onSubmit={handleSubmit}>
-      {displayedError && <p className="entity-form__error">{displayedError}</p>}
+      {displayedError && <FieldError message={displayedError} />}
       <label className="entity-form__field">
         Progetto
         <select

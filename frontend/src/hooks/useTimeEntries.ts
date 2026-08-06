@@ -36,7 +36,9 @@ export function useTimeEntries(options: UseTimeEntriesOptions = {}) {
       const { data } = await apiClient.get<TimeEntry[]>("/v1/time-entries/");
       setAllEntries(data);
     } catch (err) {
-      setError(extractErrorMessage(err, "Impossibile caricare le time entry."));
+      setError(
+        extractErrorMessage(err, "Non è stato possibile caricare le time entry. Riprova tra qualche istante."),
+      );
     } finally {
       setLoading(false);
     }

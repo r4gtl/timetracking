@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import type { Client } from "../../api/types";
 import type { ClientInput } from "../../hooks/useClients";
+import { FieldError } from "../ui/FieldError";
 
 interface ClientFormProps {
   initialValues?: Client;
@@ -30,10 +31,22 @@ export function ClientForm({ initialValues, onSubmit, onCancel, error }: ClientF
         }
       : EMPTY_VALUES,
   );
+  const [validationError, setValidationError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setValidationError(null);
+
+    if (!values.name.trim()) {
+      setValidationError("Il nome del cliente è obbligatorio.");
+      return;
+    }
+    if (!values.currency.trim()) {
+      setValidationError("La valuta è obbligatoria.");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       await onSubmit(values);
@@ -42,15 +55,20 @@ export function ClientForm({ initialValues, onSubmit, onCancel, error }: ClientF
     }
   }
 
+  const displayedError = validationError ?? error;
+
   return (
-    <form className="entity-form" onSubmit={handleSubmit}>
-      {error && <p className="entity-form__error">{error}</p>}
+    <form className="entity-form" onSubmit={handleSubmit} noValidate>
+      {displayedError && <FieldError message={displayedError} />}
       <label className="entity-form__field">
         Nome
         <input
           type="text"
           value={values.name}
-          onChange={(event) => setValues({ ...values, name: event.target.value })}
+          onChange={(event) => {
+            setValidationError(null);
+            setValues({ ...values, name: event.target.value });
+          }}
           required
         />
       </label>
@@ -68,9 +86,10 @@ export function ClientForm({ initialValues, onSubmit, onCancel, error }: ClientF
           type="text"
           value={values.currency}
           maxLength={3}
-          onChange={(event) =>
-            setValues({ ...values, currency: event.target.value.toUpperCase() })
-          }
+          onChange={(event) => {
+            setValidationError(null);
+            setValues({ ...values, currency: event.target.value.toUpperCase() });
+          }}
           required
         />
       </label>

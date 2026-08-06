@@ -10,15 +10,15 @@ export function SummaryCards({ totals }: SummaryCardsProps) {
     <div className="summary-cards">
       <div className="summary-cards__card">
         <span className="summary-cards__label">Ore totali</span>
-        <span className="summary-cards__value">{totals.total_hours.toFixed(2)}</span>
+        <span className="summary-cards__value num">{totals.total_hours.toFixed(2)}</span>
       </div>
       <div className="summary-cards__card">
         <span className="summary-cards__label">Importo totale stimato</span>
-        <span className="summary-cards__value">€ {totals.total_amount.toFixed(2)}</span>
+        <span className="summary-cards__value num">€ {totals.total_amount.toFixed(2)}</span>
       </div>
       <div className="summary-cards__card">
         <span className="summary-cards__label">Numero registrazioni</span>
-        <span className="summary-cards__value">{totals.entries_count}</span>
+        <span className="summary-cards__value num">{totals.entries_count}</span>
       </div>
     </div>
   );

@@ -26,9 +26,9 @@ export function EntriesDetail({ entries }: EntriesDetailProps) {
             <th>Data</th>
             <th>Progetto</th>
             <th>Descrizione</th>
-            <th>Durata</th>
+            <th className="num">Durata</th>
             <th>Fatturabile</th>
-            <th>Importo</th>
+            <th className="num">Importo</th>
           </tr>
         </thead>
         <tbody>
@@ -37,9 +37,9 @@ export function EntriesDetail({ entries }: EntriesDetailProps) {
               <td>{formatDateTime(entry.start_time)}</td>
               <td>#{entry.project}</td>
               <td>{entry.description || "—"}</td>
-              <td>{formatDurationShort(entry.duration_seconds)}</td>
+              <td className="num">{formatDurationShort(entry.duration_seconds)}</td>
               <td>{entry.is_billable ? "Sì" : "No"}</td>
-              <td>{entry.estimated_amount ?? "—"}</td>
+              <td className="num">{entry.estimated_amount ?? "—"}</td>
             </tr>
           ))}
           {entries.length === 0 && (
