@@ -32,8 +32,10 @@ export function useReportSummary() {
   const [data, setData] = useState<ReportSummary | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [lastFilters, setLastFilters] = useState<ReportFilterParams>({});
 
   const runReport = useCallback(async (filters: ReportFilterParams) => {
+    setLastFilters(filters);
     setLoading(true);
     setError(null);
     try {
@@ -50,5 +52,23 @@ export function useReportSummary() {
     }
   }, []);
 
-  return { data, loading, error, runReport };
+  const downloadPdf = useCallback(async () => {
+    const response = await apiClient.get<Blob>("/v1/reports/summary/pdf/", {
+      params: lastFilters,
+      responseType: "blob",
+    });
+    const { start_after, start_before } = lastFilters;
+    const filename =
+      start_after && start_before ? `riepilogo_${start_after}_${start_before}.pdf` : "riepilogo.pdf";
+    const url = window.URL.createObjectURL(response.data);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  }, [lastFilters]);
+
+  return { data, loading, error, runReport, downloadPdf };
 }

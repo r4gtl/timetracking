@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from .report_views import ReportSummaryView
+from .report_views import ReportSummaryPDFView, ReportSummaryView
 from .views import TimeEntryViewSet, UserProjectRateViewSet
 
 router = DefaultRouter()
@@ -10,4 +10,9 @@ router.register("time-entries", TimeEntryViewSet, basename="time-entry")
 
 urlpatterns = [
     path("reports/summary/", ReportSummaryView.as_view(), name="report-summary"),
+    path(
+        "reports/summary/pdf/",
+        ReportSummaryPDFView.as_view(),
+        name="report-summary-pdf",
+    ),
 ] + router.urls
