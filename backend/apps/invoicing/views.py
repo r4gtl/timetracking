@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.platypus import (
     Image,
@@ -154,6 +154,20 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         styles = getSampleStyleSheet()
         elements = []
 
+        # Descrizione può essere lunga: serve Paragraph, non stringa
+        # semplice, perché Table non fa wrapping automatico su stringhe
+        # e il testo trabocca nella colonna successiva invece di andare
+        # a capo.
+        cell_style = ParagraphStyle(
+            "TableCell", parent=styles["Normal"], fontSize=8, leading=10
+        )
+        cell_header_style = ParagraphStyle(
+            "TableCellHeader",
+            parent=cell_style,
+            textColor=colors.white,
+            fontName="Helvetica-Bold",
+        )
+
         # Logo aziendale in testa alla PDF; se il file non è ancora stato
         # raccolto da collectstatic, salta senza far fallire la generazione.
         logo_path = finders.find("invoicing/logo.png")
@@ -188,12 +202,19 @@ class InvoiceViewSet(viewsets.ModelViewSet):
             elements.append(Paragraph(address_html, styles["Normal"]))
         elements.append(Spacer(1, 0.8 * cm))
 
-        table_data = [["Descrizione", "Ore", "Tariffa", "Importo"]]
+        table_data = [
+            [
+                Paragraph("Descrizione", cell_header_style),
+                Paragraph("Ore", cell_header_style),
+                Paragraph("Tariffa", cell_header_style),
+                Paragraph("Importo", cell_header_style),
+            ]
+        ]
         total = Decimal("0")
         for line in invoice.lines.all():
             table_data.append(
                 [
-                    line.description,
+                    Paragraph(line.description, cell_style),
                     f"{line.quantity_hours}",
                     f"{line.unit_rate} {invoice.currency}",
                     f"{line.amount.quantize(Decimal('0.01'))} {invoice.currency}",
@@ -209,6 +230,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
                     ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
                     ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
                     ("ALIGN", (1, 1), (-1, -1), "RIGHT"),
+                    ("VALIGN", (0, 0), (-1, -1), "TOP"),
                     ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
                     (
                         "ROWBACKGROUNDS",

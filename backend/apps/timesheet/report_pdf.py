@@ -3,7 +3,7 @@ import io
 from django.contrib.staticfiles import finders
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.platypus import (
     Image,
@@ -22,6 +22,20 @@ def build_report_pdf(filters_data, report_data) -> io.BytesIO:
     )
     styles = getSampleStyleSheet()
     elements = []
+
+    # Celle testuali potenzialmente lunghe (Cliente/Progetto/Descrizione):
+    # servono Paragraph, non stringhe semplici, perché Table non fa
+    # wrapping automatico su stringhe e il testo trabocca nella colonna
+    # successiva invece di andare a capo.
+    cell_style = ParagraphStyle(
+        "TableCell", parent=styles["Normal"], fontSize=8, leading=10
+    )
+    cell_header_style = ParagraphStyle(
+        "TableCellHeader",
+        parent=cell_style,
+        textColor=colors.white,
+        fontName="Helvetica-Bold",
+    )
 
     # Logo aziendale in testa alla PDF; se il file non è ancora stato
     # raccolto da collectstatic, salta senza far fallire la generazione.
@@ -70,13 +84,13 @@ def build_report_pdf(filters_data, report_data) -> io.BytesIO:
 
     table_data = [
         [
-            "Data",
-            "Cliente",
-            "Progetto",
-            "Descrizione",
-            "Ore",
-            "Tariffa",
-            "Importo",
+            Paragraph("Data", cell_header_style),
+            Paragraph("Cliente", cell_header_style),
+            Paragraph("Progetto", cell_header_style),
+            Paragraph("Descrizione", cell_header_style),
+            Paragraph("Ore", cell_header_style),
+            Paragraph("Tariffa", cell_header_style),
+            Paragraph("Importo", cell_header_style),
         ]
     ]
     for row in report_data["detail_rows"]:
@@ -85,9 +99,9 @@ def build_report_pdf(filters_data, report_data) -> io.BytesIO:
         table_data.append(
             [
                 row["date"].strftime("%d/%m/%Y"),
-                row["client_name"],
-                row["project_name"],
-                row["description"],
+                Paragraph(row["client_name"], cell_style),
+                Paragraph(row["project_name"], cell_style),
+                Paragraph(row["description"], cell_style),
                 f"{row['hours']}",
                 f"{rate}" if rate is not None else "-",
                 f"{amount}" if amount is not None else "-",
@@ -97,11 +111,11 @@ def build_report_pdf(filters_data, report_data) -> io.BytesIO:
     col_widths = [
         2.2 * cm,
         2.8 * cm,
-        2.8 * cm,
-        5 * cm,
-        1.5 * cm,
-        2 * cm,
-        2.2 * cm,
+        3.2 * cm,
+        4.5 * cm,
+        1.3 * cm,
+        1.7 * cm,
+        1.8 * cm,
     ]
     table = Table(table_data, colWidths=col_widths)
     table.setStyle(
@@ -111,6 +125,7 @@ def build_report_pdf(filters_data, report_data) -> io.BytesIO:
                 ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
                 ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
                 ("ALIGN", (4, 1), (-1, -1), "RIGHT"),
+                ("VALIGN", (0, 0), (-1, -1), "TOP"),
                 ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
                 (
                     "ROWBACKGROUNDS",
