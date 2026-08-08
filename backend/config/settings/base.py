@@ -149,3 +149,9 @@ SIMPLE_JWT = {
 # django-cors-headers
 
 CORS_ALLOWED_ORIGINS: list[str] = []
+
+
+# Telegram bot integration
+
+TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN", default="")
+TELEGRAM_WEBHOOK_SECRET = env("TELEGRAM_WEBHOOK_SECRET", default="")
