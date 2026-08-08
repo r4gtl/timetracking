@@ -112,6 +112,11 @@ export interface ReportSummary {
   entries: TimeEntry[];
 }
 
+export interface TelegramLink {
+  is_active: boolean;
+  deep_link: string;
+}
+
 export interface Invoice {
   id: number;
   client: number;

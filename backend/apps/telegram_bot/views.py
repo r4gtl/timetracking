@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -16,6 +16,7 @@ from apps.timesheet.models import TimeEntry
 from . import bot_api
 from . import services as telegram_services
 from .models import TelegramLink
+from .serializers import TelegramLinkSerializer
 from .utils import format_duration
 
 NOT_LINKED_MESSAGE = (
@@ -178,3 +179,11 @@ class TelegramWebhookView(APIView):
                 )
 
         bot_api.answer_callback_query(callback_query_id)
+
+
+class TelegramLinkView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        link, _ = TelegramLink.objects.get_or_create(user=request.user)
+        return Response(TelegramLinkSerializer(link).data, status=200)

@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from apps.telegram_bot.views import TelegramWebhookView
+from apps.telegram_bot.views import TelegramLinkView, TelegramWebhookView
 from config import views
 
 urlpatterns = [
@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/telegram/webhook/', TelegramWebhookView.as_view(), name='telegram-webhook'),
+    path('api/v1/telegram/link/', TelegramLinkView.as_view(), name='telegram-link'),
     path('api/v1/', include('apps.clients.urls')),
     path('api/v1/', include('apps.projects.urls')),
     path('api/v1/', include('apps.timesheet.urls')),

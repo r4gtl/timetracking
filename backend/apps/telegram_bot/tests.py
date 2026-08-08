@@ -274,3 +274,43 @@ class TelegramBotCommandsTests(APITestCase):
         self.assertIn("1h", text)
         self.assertIn("30m", text)
         self.assertIn("Totale: 1h 30m", text)
+
+
+@override_settings(TELEGRAM_BOT_USERNAME="MyTimetrackerBot")
+class TelegramLinkViewTests(APITestCase):
+    def setUp(self):
+        self.url = reverse("telegram-link")
+        self.user = User.objects.create_user(username="giulia", password="x")
+
+    def test_unauthenticated_request_returns_401(self):
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_creates_link_for_user_without_existing_one(self):
+        self.client.force_authenticate(user=self.user)
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertFalse(response.data["is_active"])
+        link = TelegramLink.objects.get(user=self.user)
+        self.assertTrue(link.link_token)
+        self.assertEqual(
+            response.data["deep_link"],
+            f"https://t.me/MyTimetrackerBot?start={link.link_token}",
+        )
+
+    def test_existing_active_link_returns_same_deep_link(self):
+        link = TelegramLink.objects.create(user=self.user, chat_id=123, is_active=True)
+        self.client.force_authenticate(user=self.user)
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["is_active"])
+        self.assertEqual(
+            response.data["deep_link"],
+            f"https://t.me/MyTimetrackerBot?start={link.link_token}",
+        )
+        self.assertEqual(TelegramLink.objects.filter(user=self.user).count(), 1)

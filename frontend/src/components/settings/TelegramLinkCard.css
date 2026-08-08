@@ -1,0 +1,32 @@
+.telegram-link-card__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+
+.telegram-link-card__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.telegram-link-card__badge--active {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.telegram-link-card__description {
+  color: var(--ink-muted);
+  margin: 0 0 var(--space-2);
+}
+
+.telegram-link-card__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}

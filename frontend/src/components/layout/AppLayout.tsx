@@ -9,6 +9,7 @@ const NAV_ITEMS: { to: string; label: string; end?: boolean }[] = [
   { to: "/tracker", label: "Tracker" },
   { to: "/reports", label: "Report" },
   { to: "/invoices", label: "Fatture" },
+  { to: "/settings", label: "Impostazioni" },
 ];
 
 export function AppLayout() {
